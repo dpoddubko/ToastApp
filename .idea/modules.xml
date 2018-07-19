@@ -3,7 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ToastApp.iml" filepath="$PROJECT_DIR$/ToastApp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ToastApp.iml" filepath="$PROJECT_DIR$/ToastApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/toastlibrary/toastlibrary.iml" filepath="$PROJECT_DIR$/toastlibrary/toastlibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/toastlibrary/toastlibrary.iml" filepath="$PROJECT_DIR$/toastlibrary/toastlibrary.iml" />
     </modules>
   </component>

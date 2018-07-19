@@ -1,4 +1,16 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
+    }
+}
+
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
 
 android {
     compileSdkVersion 27
@@ -29,3 +41,123 @@ dependencies {
     compile 'com.android.support:appcompat-v7:27.+'
     testCompile 'junit:junit:4.12'
 }
+
+ext {
+    bintrayRepo = 'toastrepository'
+    bintrayName = 'my-toast'
+
+    publishedGroupId = 'com.toastmain.toastapp.toastlibrary'
+    libraryName = 'toastlibrary'
+    artifact = 'my-toast'
+
+    libraryDescription = 'This view is a container that supports diagonal scroll and fling gesture. It is based on AOSP HorizontalScrollView.'
+
+    siteUrl = 'https://github.com/dpoddubko/ToastApp'
+    gitUrl = 'https://github.com/dpoddubko/ToastApp.git'
+
+    libraryVersion = '0.2.1'
+
+    developerId = 'dpoddubko'
+    developerName = 'Dmitry Poddubko'
+    developerEmail = 'dpoddubko@yandex.ru'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+group = publishedGroupId
+version = libraryVersion
+
+install {
+    repositories.mavenInstaller {
+        pom.project {
+            packaging 'jar'
+            groupId publishedGroupId
+            artifactId artifact
+
+            name libraryName
+            description libraryDescription
+            url siteUrl
+
+            licenses {
+                license {
+                    name licenseName
+                    url licenseUrl
+                }
+            }
+            developers {
+                developer {
+                    id developerId
+                    name developerName
+                    email developerEmail
+                }
+            }
+            scm {
+                connection gitUrl
+                developerConnection gitUrl
+                url siteUrl
+            }
+        }
+    }
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives']
+    pkg {
+        repo = bintrayRepo
+        name = bintrayName
+        desc = libraryDescription
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = allLicenses
+        dryRun = false
+        publish = true
+        override = false
+        publicDownloadNumbers = true
+        version {
+            desc = libraryDescription
+        }
+    }
+}
+
+//gradlew :toastlibrary:clean
+//gradlew :toastlibrary:assembleRelease
+//gradlew :toastlibrary:bintrayUpload
+// package Licenses *
+//Apache-2.0
+
+//https://github.com/bintray/gradle-bintray-plugin/issues/151
+//please create your account in bintray using in the following link to avaoid this error
+//https://bintray.com/signup/oss
+
+//maven {
+//    url "https://dl.bintray.com/dpoddubko/toastrepository/"
+//}
+//compile 'com.toastmain.toastapp.toastlibrary:my-toast:0.1.1'
